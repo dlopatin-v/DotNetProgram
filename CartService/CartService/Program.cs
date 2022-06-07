@@ -1,12 +1,19 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
 using CartService.BLL;
+using CartService.DAL;
+using CartService.DAL.Models;
+using Ninject;
+using System.Reflection;
 
-Console.WriteLine("Hello, World!");
+StandardKernel kernel = new();
+kernel.Load(Assembly.GetExecutingAssembly());
+IGatewayCart gatewayCart = kernel.Get<IGatewayCart>();
 
-ManagerCart managerCart = new ManagerCart();
+ManagerCart managerCart = new(gatewayCart);
 
 int cartId = 1;
-var item1 = new CartService.DAL.Models.Item()
+var item1 = new Item()
 {
     Name = "Milk",
     Price = 2,

@@ -1,19 +1,14 @@
 ﻿using CartService.DAL;
 using CartService.DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CartService.BLL
 {
     public class ManagerCart
     {
-        private readonly GatewayCart _gatewayCart;
-        public ManagerCart()
+        private readonly IGatewayCart _gatewayCart;
+        public ManagerCart(IGatewayCart gatewayCart)
         {
-            _gatewayCart = new GatewayCart();
+            _gatewayCart = gatewayCart;
         }
         public void AddItem(int cartId, Item item)
         {
@@ -25,7 +20,7 @@ namespace CartService.BLL
         }
         public List<Item> GetItems(int cartId)
         {
-            return _gatewayCart.GetItems(cartId);
+            return _gatewayCart.GetItems(cartId).ToList();
         }
     }
 }

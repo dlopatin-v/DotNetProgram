@@ -3,7 +3,7 @@ using LiteDB;
 
 namespace CartService.DAL
 {
-    public class GatewayCart
+    public class GatewayCart :IGatewayCart
     {
         const string dbName = "Cart.db";
         static GatewayCart()
@@ -48,7 +48,7 @@ namespace CartService.DAL
                 carts.Update(cart);
             }
         }
-        public List<Item> GetItems(int cartId)
+        public IList<Item> GetItems(int cartId)
         {
             using (var db = new LiteDatabase(dbName))
             {
