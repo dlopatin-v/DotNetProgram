@@ -26,7 +26,6 @@ public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, List<ItemDto>
     public async Task<List<ItemDto>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
     {
         return await _context.Categories
-            .AsNoTracking()
             .Where(c => c.Id == request.CategoryId)
             .SelectMany(c => c.Items)
             .ProjectToListAsync<ItemDto>(_mapper.ConfigurationProvider); //use automapper directly
