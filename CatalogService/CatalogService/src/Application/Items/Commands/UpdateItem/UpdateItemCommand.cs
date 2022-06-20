@@ -18,11 +18,11 @@ public record UpdateItemCommand : IRequest
     public uint? Amount { get; init; }
 }
 
-public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateItemCommand>
+public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateTodoItemCommandHandler(IApplicationDbContext context)
+    public UpdateItemCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
