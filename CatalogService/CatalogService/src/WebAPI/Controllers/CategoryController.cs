@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers;
+/// <summary>
+/// Category controller
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class CategoryController : ApiControllerBase
@@ -22,6 +25,11 @@ public class CategoryController : ApiControllerBase
         _logger = logger;
         _linkGenerator = linkGenerator;
     }
+    /// <summary>
+    /// Get categories
+    /// </summary>
+    /// <param name="categoriesQuery"></param>
+    /// <returns>List of categories with links</returns>
     [HttpGet]
     public async Task<IActionResult> GetCategoriesAsync([FromQuery] GetCategoriesQuery categoriesQuery)
     {
@@ -39,6 +47,11 @@ public class CategoryController : ApiControllerBase
 
         return Ok(CreateLinksForCategories(ownersWrapper));
     }
+    /// <summary>
+    /// Get category by id
+    /// </summary>
+    /// <param name="id">category id</param>
+    /// <returns>Category with links</returns>
     [HttpGet("{id}", Name = "CategoryById")]
     public async Task<IActionResult> GetCategoryByIdAsync(int id)
     {
@@ -54,7 +67,11 @@ public class CategoryController : ApiControllerBase
 
         return Ok(category);
     }
-
+    /// <summary>
+    /// Create category
+    /// </summary>
+    /// <param name="command">new category</param>
+    /// <returns>returns count</returns>
     [HttpPost(Name = "CreateCategory")]
     public async Task<ActionResult<int>> CreateCategoryAsync([FromBody] CreateCategoryCommand command) => await Mediator.Send(command);
 
@@ -65,7 +82,11 @@ public class CategoryController : ApiControllerBase
 
         return NoContent();
     }
-
+    /// <summary>
+    /// Delete category
+    /// </summary>
+    /// <param name="id">category id</param>
+    /// <returns></returns>
     [HttpDelete("{id}", Name = "DeleteCategoryById")]
     public async Task<ActionResult> DeleteCategoryByIdAsync(int id)
     {
