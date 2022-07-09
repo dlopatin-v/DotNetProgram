@@ -1,4 +1,4 @@
-﻿using CartService.BLL;
+﻿using CartServ.BLL;
 using CartService.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +28,7 @@ namespace CartServ.Controllers.V2
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetCartInfo(Guid id)
+        public IActionResult GetCartInfo(int id)
         {
             var result = _managerCart.GetItems(id);
             return Ok(result);
@@ -44,7 +44,7 @@ namespace CartServ.Controllers.V2
         [HttpPost]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult AddItemToCart(Guid id, [FromBody] Item item)
+        public IActionResult AddItemToCart(int id, [FromBody] Item item)
         {
             _managerCart.AddItem(id, item);
             return Ok();
@@ -60,7 +60,7 @@ namespace CartServ.Controllers.V2
         [HttpDelete]
         [Route("{cartId}/{itemId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult DeleteItemFromCart(Guid cartId, Guid itemId)
+        public IActionResult DeleteItemFromCart(int cartId, int itemId)
         {
             _managerCart.RemoveItem(cartId, itemId);
             return Ok();
