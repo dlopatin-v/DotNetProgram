@@ -1,26 +1,29 @@
 ﻿using CartService.DAL;
 using CartService.DAL.Models;
 
-namespace CartService.BLL
+namespace CartServ.BLL;
+
+public class ManagerCart
 {
-    public class ManagerCart
+    private readonly IGatewayCart _gatewayCart;
+    public ManagerCart(IGatewayCart gatewayCart)
     {
-        private readonly IGatewayCart _gatewayCart;
-        public ManagerCart(IGatewayCart gatewayCart)
-        {
-            _gatewayCart = gatewayCart;
-        }
-        public void AddItem(Guid cartId, Item item)
-        {
-            _gatewayCart.AddItem(cartId, item);
-        }
-        public void RemoveItem(Guid cartId, Guid itemId)
-        {
-            _gatewayCart.RemoveItem(cartId, itemId);
-        }
-        public List<Item> GetItems(Guid cartId)
-        {
-            return _gatewayCart.GetItems(cartId).ToList();
-        }
+        _gatewayCart = gatewayCart;
+    }
+    public void AddItem(int cartId, Item item)
+    {
+        _gatewayCart.AddItem(cartId, item);
+    }
+    public void RemoveItem(int cartId, int itemId)
+    {
+        _gatewayCart.RemoveItem(cartId, itemId);
+    }
+    public List<Item> GetItems(int cartId)
+    {
+        return _gatewayCart.GetItems(cartId).ToList();
+    }
+    public void UpdateItem(Item item)
+    {
+        _gatewayCart.UpdateItem(item);
     }
 }
