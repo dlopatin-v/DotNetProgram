@@ -3,7 +3,7 @@ using LiteDB;
 
 namespace CartService.DAL
 {
-    public class GatewayCart :IGatewayCart
+    public class GatewayCart : IGatewayCart
     {
         const string dbName = "Cart.db";
         static GatewayCart()
@@ -12,7 +12,7 @@ namespace CartService.DAL
             mapper.Entity<Cart>()
                 .DbRef(x => x.Items, "items");
         }
-        public void AddItem(Guid cartId, Item item)
+        public void AddItem(int cartId, Item item)
         {
             using (var db = new LiteDatabase(dbName))
             {
@@ -34,7 +34,23 @@ namespace CartService.DAL
                     .FindById(cartId);
             }
         }
-        public void RemoveItem(Guid cartId, Guid itemId)
+        public void UpdateItem(Item newItem)
+        {
+            using (var db = new LiteDatabase(dbName))
+            {
+                var items = db.GetCollection<Item>("items");
+                var item = items
+                    .FindById(newItem.Id);
+                if (item is not null)
+                {
+                    item.Name = newItem.Name;
+                    item.Quantity = newItem.Quantity;
+                    item.Price = newItem.Price;
+                    items.Update(item);
+                }
+            }
+        }
+        public void RemoveItem(int cartId, int itemId)
         {
             using (var db = new LiteDatabase(dbName))
             {
@@ -48,7 +64,7 @@ namespace CartService.DAL
                 carts.Update(cart);
             }
         }
-        public IList<Item> GetItems(Guid cartId)
+        public IList<Item> GetItems(int cartId)
         {
             using (var db = new LiteDatabase(dbName))
             {

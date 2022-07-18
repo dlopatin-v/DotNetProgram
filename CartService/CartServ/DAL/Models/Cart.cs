@@ -10,7 +10,7 @@ namespace CartService.DAL.Models
             Items = new List<Item>();
         }
         [BsonId]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public List<Item> Items { get; set; }
     }
 }

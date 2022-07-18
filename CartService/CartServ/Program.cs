@@ -1,5 +1,6 @@
 using CartServ;
-using CartService.BLL;
+using CartServ.BLL;
+using CartServ.MessageReciever.ItemUpdated;
 using CartService.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -31,7 +32,7 @@ builder.Services.AddSwaggerGen(o =>
     o.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
 });
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
-
+builder.Services.AddSingleton<IItemUpdatedConsumer, ItemUpdatedConsumer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,6 +46,8 @@ if (app.Environment.IsDevelopment())
             options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
         }
     });
+    var bus = app.Services.GetService<IItemUpdatedConsumer>();
+    bus?.RegisterOnMessageHandlerAndReceiveMessages().GetAwaiter().GetResult();
 }
 
 app.UseHttpsRedirection();

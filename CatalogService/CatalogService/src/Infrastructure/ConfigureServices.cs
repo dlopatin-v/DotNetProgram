@@ -1,4 +1,5 @@
 ﻿using CatalogService.Application.Common.Interfaces;
+using CatalogService.Infrastructure.MessageSender;
 using CatalogService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,7 @@ public static class ConfigureServices
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<ApplicationDbContextInitialiser>();
-
+        services.AddTransient<IMessageSender, MessageSender>();
         return services;
     }
 }
