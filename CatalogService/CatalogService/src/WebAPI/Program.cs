@@ -1,6 +1,7 @@
 using System.Reflection;
 using CatalogService.Infrastructure.Persistence;
 using Microsoft.OpenApi.Models;
+using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,12 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers();
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:5051";
+        options.Audience = "catalogapi";
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -35,6 +42,23 @@ builder.Services.AddSwaggerGen(options =>
     // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
+
+    options.AddSecurityDefinition("aouth2", new OpenApiSecurityScheme
+    { 
+        Type = SecuritySchemeType.OAuth2,        
+        Flows = new OpenApiOAuthFlows() { 
+            Implicit = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri("https://localhost:5051/connect/authorize"),
+                TokenUrl = new Uri("https://localhost:5051/connect/token"),
+                Scopes = new Dictionary<string, string>
+                {
+                    { "catalogapi", "Catalog Api - full access" }
+                }
+            }
+        }
+    });
+    options.OperationFilter<AuthorizeCheckOperationFilter>(); // Required to use access token
 });
 
 var app = builder.Build();
@@ -47,10 +71,18 @@ if (app.Environment.IsDevelopment())
     await initialiser.InitialiseAsync();
     await initialiser.SeedAsync();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.OAuthClientSecret("secret");
+        options.OAuthClientId("catalog_api_swagger");
+        options.OAuthAppName("Catalog API - Swagger"); // presentation purposes only
+        options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
+    });
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseMigrationsEndPoint();
 
