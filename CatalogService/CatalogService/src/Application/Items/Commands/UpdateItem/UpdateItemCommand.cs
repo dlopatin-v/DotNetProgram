@@ -21,10 +21,12 @@ public record UpdateItemCommand : IRequest
 public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IMessageSender _sender;
 
-    public UpdateItemCommandHandler(IApplicationDbContext context)
+    public UpdateItemCommandHandler(IApplicationDbContext context, IMessageSender sender)
     {
         _context = context;
+        _sender = sender;
     }
 
     public async Task<Unit> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
@@ -54,7 +56,7 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
         }
 
         await _context.SaveChangesAsync(cancellationToken);
-
+        await _sender.SendAsync(new { entity.Name, entity.Price, entity.Description, entity.Amount});
         return Unit.Value;
     }
 }
