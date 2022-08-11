@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using CatalogService.Application.Common.Interfaces;
 using CatalogService.Application.Common.Mappings;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Application.Items.Queries.GetItems;
 
 public record GetItemsQuery : IRequest<List<ItemDto>>
 {
-    public int CategoryId { get; init; }
 }
 
 public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, List<ItemDto>>
@@ -25,9 +22,7 @@ public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, List<ItemDto>
 
     public async Task<List<ItemDto>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Categories
-            .Where(c => c.Id == request.CategoryId)
-            .SelectMany(c => c.Items)
+        return await _context.Items
             .ProjectToListAsync<ItemDto>(_mapper.ConfigurationProvider); //use automapper directly
     }
 }

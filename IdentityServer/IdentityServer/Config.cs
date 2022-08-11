@@ -44,6 +44,22 @@ namespace IdentityServer
                         "catalogapi"
                     }
                 },
+                new Client
+                {
+                    ClientId = "client",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,                    
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client has access to
+                    AllowedScopes = { "catalogapi" }
+                }
             };
 
     }

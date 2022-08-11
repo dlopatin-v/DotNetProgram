@@ -4,6 +4,7 @@ using CatalogService.Application.Categories.Commands.UpdateCategory;
 using CatalogService.Application.Categories.Queries.GetCategories;
 using CatalogService.Application.Categories.Queries.GetCategory;
 using CatalogService.Application.Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebAPI.Models;
@@ -30,6 +31,7 @@ public class CategoryController : ApiControllerBase
     /// </summary>
     /// <param name="categoriesQuery"></param>
     /// <returns>List of categories with links</returns>
+    [Authorize(Roles = "Buyer")]
     [HttpGet]
     public async Task<IActionResult> GetCategoriesAsync([FromQuery] GetCategoriesQuery categoriesQuery)
     {
@@ -52,6 +54,7 @@ public class CategoryController : ApiControllerBase
     /// </summary>
     /// <param name="id">category id</param>
     /// <returns>Category with links</returns>
+    [Authorize(Roles = "Buyer")]
     [HttpGet("{id}", Name = "CategoryById")]
     public async Task<IActionResult> GetCategoryByIdAsync(int id)
     {
@@ -72,6 +75,7 @@ public class CategoryController : ApiControllerBase
     /// </summary>
     /// <param name="command">new category</param>
     /// <returns>returns count</returns>
+    [Authorize(Roles = "Manager")]
     [HttpPost(Name = "CreateCategory")]
     public async Task<ActionResult<int>> CreateCategoryAsync([FromBody] CreateCategoryCommand command) => await Mediator.Send(command);
 
@@ -87,6 +91,7 @@ public class CategoryController : ApiControllerBase
     /// </summary>
     /// <param name="id">category id</param>
     /// <returns></returns>
+    [Authorize(Roles = "Manager")]
     [HttpDelete("{id}", Name = "DeleteCategoryById")]
     public async Task<ActionResult> DeleteCategoryByIdAsync(int id)
     {

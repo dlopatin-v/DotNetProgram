@@ -178,7 +178,7 @@ public class SeedData
             {
                 throw new Exception(result.Errors.First().Description);
             }
-            result = userMgr.AddToRoleAsync(alice, "Buyer").Result;
+            result = userMgr.AddToRoleAsync(bob, "Buyer").Result;
             if (!result.Succeeded)
             {
                 throw new Exception(result.Errors.First().Description);

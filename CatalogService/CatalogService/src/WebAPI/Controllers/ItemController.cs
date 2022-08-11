@@ -3,7 +3,10 @@ using CatalogService.Application.Common.Models;
 using CatalogService.Application.Items.Commands.CreateItem;
 using CatalogService.Application.Items.Commands.DeleteItem;
 using CatalogService.Application.Items.Commands.UpdateItem;
+using CatalogService.Application.Items.Queries.GetItem;
+using CatalogService.Application.Items.Queries.GetItemProperties;
 using CatalogService.Application.Items.Queries.GetItems;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +15,7 @@ namespace WebAPI.Controllers;
 /// Item controller
 /// </summary>
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class ItemController : ApiControllerBase
 {
@@ -22,16 +26,41 @@ public class ItemController : ApiControllerBase
         this.logger=logger;
     }
     /// <summary>
-    /// Get list of items
+    /// Get item properties
     /// </summary>
-    /// <param name="query">category id</param>
-    /// <returns>List of items</returns>
-    /// <response code="200">Returns items successfully</response>
-    [HttpGet]
+    /// <param name="query">item name</param>
+    /// <returns>Item properties</returns>
+    /// <response code="200">Returns item properties successfully</response>
+    [Authorize(Roles = "Buyer")]
+    [HttpGet("properties")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ItemDto>>> GetItems([FromQuery] GetItemsQuery query)
+    public async Task<ActionResult<ItemDto?>> GetItemProperties([FromQuery] GetItemPropertiesQuery query)
     {
         return await Mediator.Send(query);
+    }
+    /// <summary>
+    /// Get item names
+    /// </summary>
+    /// <returns>Item</returns>
+    /// <response code="200">Returns item successfully</response>
+    [Authorize(Roles = "Buyer")]
+    [HttpGet("names")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<string>>> GetItemsNames()
+    {
+        return await Mediator.Send(new GetItemsNamesQuery());
+    }
+    /// <summary>
+    /// Get list of items
+    /// </summary>
+    /// <returns>List of items</returns>
+    /// <response code="200">Returns items successfully</response>
+    [Authorize(Roles = "Buyer")]
+    [HttpGet("list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ItemDto>>> GetItems()
+    {
+        return await Mediator.Send(new GetItemsQuery());
     }
     /// <summary>
     /// Get paginated list of items
@@ -39,6 +68,7 @@ public class ItemController : ApiControllerBase
     /// <param name="query">category id with paging info</param>
     /// <returns>paginated list of items</returns>
     /// <response code="200">Returns items successfully</response>
+    [Authorize(Roles = "Manager")]
     [HttpGet("paginated")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<PaginatedList<ItemDto>>> GetTodoItemsWithPagination([FromQuery] GetItemsWithPaginationQuery query)
@@ -51,6 +81,7 @@ public class ItemController : ApiControllerBase
     /// <param name="command">new item</param>
     /// <returns>item count</returns>
     /// <response code="200">Item has been created successfully</response>
+    [Authorize(Roles = "Manager")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<int>> Create(CreateItemCommand command)
@@ -74,6 +105,7 @@ public class ItemController : ApiControllerBase
     /// <returns></returns>
     /// <response code="204">Item has been updated successfully</response>
     /// <response code="400">Item has not been updated successfully</response>
+    [Authorize(Roles = "Manager")]
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -94,6 +126,7 @@ public class ItemController : ApiControllerBase
     /// <param name="id">item id</param>
     /// <returns></returns>
     /// <response code="204">Item has been deleted successfully</response>
+    [Authorize(Roles = "Manager")]
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> Delete(int id)
