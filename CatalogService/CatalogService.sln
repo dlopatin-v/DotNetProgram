@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "CatalogService\src\WebAPI\WebAPI.csproj", "{91FCD12C-69D2-4EFC-8134-3B9C648DED95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQLServer", "GraphQLServer\GraphQLServer.csproj", "{BEC0BF3A-85D6-410B-8126-3AE14B95D5FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAPI", "GraphAPI\GraphAPI.csproj", "{FFF2B0A8-98D3-4AA9-BCC4-9B4632C8E353}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{91FCD12C-69D2-4EFC-8134-3B9C648DED95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91FCD12C-69D2-4EFC-8134-3B9C648DED95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91FCD12C-69D2-4EFC-8134-3B9C648DED95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC0BF3A-85D6-410B-8126-3AE14B95D5FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC0BF3A-85D6-410B-8126-3AE14B95D5FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC0BF3A-85D6-410B-8126-3AE14B95D5FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC0BF3A-85D6-410B-8126-3AE14B95D5FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFF2B0A8-98D3-4AA9-BCC4-9B4632C8E353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFF2B0A8-98D3-4AA9-BCC4-9B4632C8E353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFF2B0A8-98D3-4AA9-BCC4-9B4632C8E353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFF2B0A8-98D3-4AA9-BCC4-9B4632C8E353}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
