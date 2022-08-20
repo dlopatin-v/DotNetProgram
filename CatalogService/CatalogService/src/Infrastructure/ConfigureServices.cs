@@ -12,7 +12,7 @@ public static class ConfigureServices
     {
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=Catalog;Trusted_Connection=True;",
-                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)), ServiceLifetime.Transient);
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
