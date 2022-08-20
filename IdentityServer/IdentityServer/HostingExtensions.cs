@@ -35,7 +35,8 @@ namespace IdentityServer
                     opt => opt.MigrationsAssembly(migrationsAssembly)))
                 .AddOperationalStore(options => options.ConfigureDbContext = b => b.UseSqlite(connectionString,
                     opt => opt.MigrationsAssembly(migrationsAssembly)))
-                .AddAspNetIdentity<IdentityUser>();
+                .AddAspNetIdentity<IdentityUser>()
+                .AddProfileService<ProfileService>();
             builder.Services.AddAuthentication()
                 .AddCookie();
             return builder.Build();

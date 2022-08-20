@@ -1,5 +1,6 @@
 using System.Reflection;
 using CatalogService.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using WebAPI;
 
@@ -12,10 +13,16 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+    .AddJwtBearer(options =>
     {
         options.Authority = "https://localhost:5051";
         options.Audience = "catalogapi";
+        // audience is optional, make sure you read the following paragraphs
+        // to understand your options
+        options.TokenValidationParameters.ValidateAudience = false;
+
+        // it's recommended to check the type header to avoid "JWT confusion" attacks
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -43,7 +50,7 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
 
-    options.AddSecurityDefinition("aouth2", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     { 
         Type = SecuritySchemeType.OAuth2,        
         Flows = new OpenApiOAuthFlows() { 
@@ -83,6 +90,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseMigrationsEndPoint();
 
